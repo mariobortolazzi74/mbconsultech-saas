@@ -8,7 +8,7 @@ export default async function DashboardPage() {
   
   // Fetch user projects
   const { data: projects } = await supabase
-    .from('projects')
+    .from('mbc_projects')
     .select('*')
     .eq('client_id', user?.id)
     .order('created_at', { ascending: false })

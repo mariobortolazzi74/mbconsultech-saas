@@ -13,14 +13,14 @@ export default async function TicketsPage({
   
   // Fetch projects for the dropdown
   const { data: projects } = await supabase
-    .from('projects')
+    .from('mbc_projects')
     .select('id, name')
     .eq('client_id', user?.id)
     
   // Fetch user tickets
   const { data: tickets } = await supabase
-    .from('tickets')
-    .select('*, projects(name)')
+    .from('mbc_tickets')
+    .select('*, mbc_projects(name)')
     .order('created_at', { ascending: false })
     
   // Filter tickets manually since the RLS policy already filters them, 
@@ -122,7 +122,7 @@ export default async function TicketsPage({
                     </span>
                   </div>
                   <div className="text-xs text-zinc-500 mb-4">
-                    Progetto: <span className="font-medium text-zinc-400">{ticket.projects?.name}</span> • 
+                    Progetto: <span className="font-medium text-zinc-400">{ticket.mbc_projects?.name}</span> • 
                     Aperto il: {new Date(ticket.created_at).toLocaleDateString('it-IT')}
                   </div>
                   

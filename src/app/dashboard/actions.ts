@@ -15,7 +15,7 @@ export async function createProject(formData: FormData) {
   const file = formData.get('file') as File
   
   const { data: project, error: projectError } = await supabase
-    .from('projects')
+    .from('mbc_projects')
     .insert({
       client_id: user.id,
       name: name,
@@ -38,7 +38,7 @@ export async function createProject(formData: FormData) {
       .upload(filePath, file)
       
     if (!uploadError) {
-      await supabase.from('documents').insert({
+      await supabase.from('mbc_documents').insert({
         project_id: project.id,
         file_name: file.name,
         storage_path: filePath
@@ -64,7 +64,7 @@ export async function createTicket(formData: FormData) {
   const description = formData.get('description') as string
   
   const { error } = await supabase
-    .from('tickets')
+    .from('mbc_tickets')
     .insert({
       project_id: projectId,
       title,
