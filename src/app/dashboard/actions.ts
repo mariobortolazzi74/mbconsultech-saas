@@ -34,7 +34,7 @@ export async function createProject(formData: FormData) {
     const filePath = `${user.id}/${project.id}/${fileName}`
     
     const { error: uploadError } = await supabase.storage
-      .from('documents')
+      .from('mbc_documents')
       .upload(filePath, file)
       
     if (!uploadError) {
