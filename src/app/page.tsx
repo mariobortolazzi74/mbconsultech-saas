@@ -21,6 +21,7 @@ export default function Home() {
                         {/*  FLAG_NODOCLIMA: Rimuovere la classe 'hidden' qui sotto per mostrare il link  */}
                         <a href="#nodoclima" className="hidden hover:text-emerald-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">NodoClima</a>
                         <a href="#checkup" className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-md text-sm font-semibold transition-colors shadow-[0_0_15px_rgba(5,150,105,0.3)]">Prenota un Check-up</a>
+                        <Link href="/login" className="border border-emerald-500 text-emerald-400 hover:bg-emerald-900/30 px-5 py-2.5 rounded-md text-sm font-semibold transition-colors">Area Riservata</Link>
                     </div>
                 </div>
             </div>
