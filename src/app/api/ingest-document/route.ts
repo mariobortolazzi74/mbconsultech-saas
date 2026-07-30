@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { GoogleGenAI } from '@google/genai';
-import pdf from 'pdf-parse';
+import { PDFParse } from 'pdf-parse';
 
 // Initialize Supabase Admin Client to bypass RLS for inserting embeddings
 const supabaseAdmin = createClient(
@@ -50,8 +50,10 @@ export async function POST(req: NextRequest) {
     
     let text = '';
     try {
-      const pdfData = await pdf(buffer);
+      const parser = new PDFParse({ data: buffer });
+      const pdfData = await parser.getText();
       text = pdfData.text;
+      await parser.destroy();
     } catch (parseError) {
       console.error('PDF parsing error:', parseError);
       return NextResponse.json({ error: 'Failed to parse PDF' }, { status: 500 });
