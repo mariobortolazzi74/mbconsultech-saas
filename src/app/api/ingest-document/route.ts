@@ -3,12 +3,6 @@ import { createClient } from '@supabase/supabase-js';
 import { GoogleGenAI } from '@google/genai';
 import { PDFParse } from 'pdf-parse';
 
-// Initialize Supabase Admin Client to bypass RLS for inserting embeddings
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
 // Initialize Gemini Client
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -26,6 +20,12 @@ function splitTextIntoChunks(text: string, chunkSize: number = 1000, overlap: nu
 
 export async function POST(req: NextRequest) {
   try {
+    // Initialize Supabase Admin Client to bypass RLS for inserting embeddings
+    const supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
     const { documentId, projectId, storagePath } = await req.json();
 
     if (!documentId || !projectId || !storagePath) {
