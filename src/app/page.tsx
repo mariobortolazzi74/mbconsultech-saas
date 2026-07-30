@@ -355,9 +355,9 @@ export default function Home() {
             </div>
             
             <div className="text-center md:text-left text-xs text-zinc-600">
-                <p className="mb-3">&copy; 2026 MB Consultech di Mario Bortolazzi. Partita IVA: [Inserire P.IVA]. Tutti i diritti riservati.</p>
+                <p className="mb-3">&copy; 2026 MB Consultech di Mario Bortolazzi. Partita IVA: IT00000000000. Tutti i diritti riservati.</p>
                 <p className="max-w-4xl text-zinc-500/70 border border-zinc-800/50 p-3 rounded-lg bg-zinc-900/30">
-                    <strong>Nota legale:</strong> Attività di consulenza strategico-operativa esente da responsabilità di firma ex DM 37/08. P.IVA [Inserire P.IVA]. I servizi offerti consistono in architettura logica, diagnostica e advisory tecnologica indipendente, e non si sostituiscono alla progettazione esecutiva né alla direzione lavori normate dalla legislazione vigente.
+                    <strong>Nota legale:</strong> Attività di consulenza strategico-operativa esente da responsabilità di firma ex DM 37/08. P.IVA IT00000000000. I servizi offerti consistono in architettura logica, diagnostica e advisory tecnologica indipendente, e non si sostituiscono alla progettazione esecutiva né alla direzione lavori normate dalla legislazione vigente.
                 </p>
             </div>
         </div>

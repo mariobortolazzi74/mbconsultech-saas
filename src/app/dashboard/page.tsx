@@ -60,18 +60,20 @@ export default async function DashboardPage() {
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
             <ul className="divide-y divide-zinc-800">
               {projects.map((project: any) => (
-                <li key={project.id} className="p-4 hover:bg-zinc-800/50 transition-colors flex justify-between items-center">
-                  <div>
-                    <h3 className="text-white font-medium">{project.name}</h3>
-                    <p className="text-xs text-zinc-500 mt-1">
-                      Creato il: {new Date(project.created_at).toLocaleDateString('it-IT')}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-900/30 text-emerald-400 border border-emerald-800">
-                      {project.status.toUpperCase()}
-                    </span>
-                  </div>
+                <li key={project.id} className="hover:bg-zinc-800/50 transition-colors">
+                  <Link href={`/dashboard/projects/${project.id}`} className="p-4 flex justify-between items-center w-full">
+                    <div>
+                      <h3 className="text-white font-medium">{project.name}</h3>
+                      <p className="text-xs text-zinc-500 mt-1">
+                        Creato il: {new Date(project.created_at).toLocaleDateString('it-IT')}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-900/30 text-emerald-400 border border-emerald-800">
+                        {project.status.toUpperCase()}
+                      </span>
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>
