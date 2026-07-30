@@ -2,11 +2,11 @@ import Link from 'next/link'
 import { signInWithMagicLink } from './actions'
 import Image from 'next/image'
 
-export default async function Login({
-  searchParams,
-}: {
-  searchParams: { message: string }
+export default async function Login(props: {
+  searchParams: Promise<{ message: string }>
 }) {
+  const searchParams = await props.searchParams;
+  
   return (
     <div className="min-h-screen bg-zinc-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
