@@ -3,11 +3,18 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
 }
 
 :root {
-  --background: #09090b; /* zinc-950 */
-  --foreground: #d4d4d8; /* zinc-300 */
+  /* Supabase-inspired Dark Theme */
+  --background: #121212; /* Very deep dark gray / almost black */
+  --surface: #1c1c1c; /* Slightly lighter for cards and inputs */
+  --foreground: #ededed; /* Crisp white/gray for text */
+  --muted: #8b8b8b; /* Muted text */
+  --border: #2e2e2e; /* Subtle borders */
 }
 
 body {

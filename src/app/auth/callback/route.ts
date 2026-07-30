@@ -16,5 +16,5 @@ export async function GET(request: Request) {
   }
 
   // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/login?message=Link scaduto o non valido`)
+  return NextResponse.redirect(`${origin}/login?message=Link expired or invalid`)
 }

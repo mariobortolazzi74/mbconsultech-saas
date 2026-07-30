@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { uploadProjectDocument } from '@/app/dashboard/actions'
+import { UploadCloud, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
 
 export function DocumentUploadForm({ projectId }: { projectId: string }) {
   const [isUploading, setIsUploading] = useState(false)
@@ -36,12 +37,12 @@ export function DocumentUploadForm({ projectId }: { projectId: string }) {
 
       if (!ingestRes.ok) {
         const errorData = await ingestRes.json()
-        throw new Error(errorData.error || 'Errore durante l\'elaborazione del documento')
+        throw new Error(errorData.error || 'Error processing document')
       }
 
       setSuccess(true)
     } catch (err: any) {
-      setError(err.message || 'Si è verificato un errore inaspettato')
+      setError(err.message || 'An unexpected error occurred')
     } finally {
       setIsUploading(false)
       setIsIngesting(false)
@@ -49,27 +50,35 @@ export function DocumentUploadForm({ projectId }: { projectId: string }) {
   }
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-      <h3 className="text-lg font-bold text-white mb-4">Carica Documentazione RAG</h3>
-      <p className="text-sm text-zinc-400 mb-6">
-        Allega un nuovo documento (PDF). Una volta caricato, l'IA estrarrà il testo e lo memorizzerà nel database vettoriale per poter interrogare i dati successivamente.
+    <div className="bg-surface border border-border rounded-xl p-6 shadow-sm">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-500">
+          <UploadCloud className="w-5 h-5" />
+        </div>
+        <h3 className="text-lg font-semibold text-foreground">Upload RAG Documentation</h3>
+      </div>
+      
+      <p className="text-sm text-muted mb-6 leading-relaxed">
+        Attach a new PDF document. Once uploaded, the AI will extract the text and store it in the vector database to allow querying later.
       </p>
 
       {success && (
-        <div className="mb-6 p-4 bg-emerald-900/30 border border-emerald-800 rounded-lg text-emerald-400 text-sm">
-          Documento caricato ed elaborato con successo! I dati sono pronti per la ricerca semantica.
+        <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-start gap-3 text-emerald-400 text-sm">
+          <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <p>Document successfully uploaded and processed! Data is ready for semantic search.</p>
         </div>
       )}
 
       {error && (
-        <div className="mb-6 p-4 bg-red-900/30 border border-red-800 rounded-lg text-red-400 text-sm">
-          {error}
+        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-start gap-3 text-red-400 text-sm">
+          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <p>{error}</p>
         </div>
       )}
 
       <form action={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="file" className="sr-only">Seleziona File</label>
+          <label htmlFor="file" className="sr-only">Select File</label>
           <input
             type="file"
             name="file"
@@ -77,25 +86,22 @@ export function DocumentUploadForm({ projectId }: { projectId: string }) {
             accept=".pdf"
             required
             disabled={isUploading || isIngesting}
-            className="w-full px-4 py-3 bg-zinc-950 border border-zinc-700 rounded-lg text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all disabled:opacity-50"
+            className="w-full px-4 py-3 bg-background border border-border rounded-lg text-muted file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-surface file:text-foreground file:border file:border-border hover:file:bg-zinc-800 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 transition-all disabled:opacity-50"
           />
         </div>
 
         <button
           type="submit"
           disabled={isUploading || isIngesting}
-          className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white font-bold rounded-lg transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)] disabled:shadow-none flex items-center justify-center gap-2"
+          className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:bg-surface disabled:border-border disabled:text-muted disabled:border text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
         >
-          {isUploading && (
-            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-          )}
-          {isIngesting && (
-            <svg className="animate-spin h-5 w-5 text-emerald-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+          {(isUploading || isIngesting) && (
+            <Loader2 className="w-4 h-4 animate-spin" />
           )}
           
-          {!isUploading && !isIngesting && 'Carica ed Elabora PDF'}
-          {isUploading && 'Caricamento file...'}
-          {isIngesting && 'Elaborazione IA (può richiedere tempo)...'}
+          {!isUploading && !isIngesting && 'Upload & Process PDF'}
+          {isUploading && 'Uploading file...'}
+          {isIngesting && 'AI Processing (may take time)...'}
         </button>
       </form>
     </div>

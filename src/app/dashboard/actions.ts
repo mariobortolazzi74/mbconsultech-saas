@@ -26,7 +26,7 @@ export async function createProject(formData: FormData) {
     .single()
     
   if (projectError || !project) {
-    throw new Error('Impossibile creare il progetto')
+    throw new Error('Unable to create the project')
   }
 
   if (file && file.size > 0) {
@@ -74,7 +74,7 @@ export async function createTicket(formData: FormData) {
     })
     
   if (error) {
-    throw new Error('Impossibile creare il ticket')
+    throw new Error('Unable to create the ticket')
   }
   
   revalidatePath('/dashboard/tickets')
@@ -85,14 +85,14 @@ export async function uploadProjectDocument(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    throw new Error('Non autenticato')
+    throw new Error('Unauthenticated')
   }
 
   const projectId = formData.get('project_id') as string
   const file = formData.get('file') as File
 
   if (!projectId || !file || file.size === 0) {
-    throw new Error('Dati mancanti o file non valido')
+    throw new Error('Missing data or invalid file')
   }
 
   const fileExt = file.name.split('.').pop()
@@ -104,7 +104,7 @@ export async function uploadProjectDocument(formData: FormData) {
     .upload(filePath, file)
 
   if (uploadError) {
-    throw new Error('Impossibile caricare il file nello storage')
+    throw new Error('Unable to upload the file to storage')
   }
 
   const { data: document, error: dbError } = await supabase
@@ -118,7 +118,7 @@ export async function uploadProjectDocument(formData: FormData) {
     .single()
 
   if (dbError || !document) {
-    throw new Error('Impossibile salvare i metadati del file')
+    throw new Error('Unable to save file metadata')
   }
 
   revalidatePath(`/dashboard/projects/${projectId}`)
@@ -133,7 +133,7 @@ export async function uploadProjectDocument(formData: FormData) {
 export async function simulateAnalysisComplete(projectId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Non autenticato')
+  if (!user) throw new Error('Unauthenticated')
 
   await supabase
     .from('mbc_projects')
@@ -148,7 +148,7 @@ export async function simulateAnalysisComplete(projectId: string) {
 export async function simulatePayment(projectId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Non autenticato')
+  if (!user) throw new Error('Unauthenticated')
 
   await supabase
     .from('mbc_projects')

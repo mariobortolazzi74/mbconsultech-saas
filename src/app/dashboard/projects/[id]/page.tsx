@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { DocumentUploadForm } from '@/components/DocumentUploadForm'
 import { simulatePayment, simulateAnalysisComplete } from '../../actions'
+import { ArrowLeft, CheckCircle, AlertTriangle, FileText, Lock, FileArchive, Loader2 } from 'lucide-react'
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -37,136 +38,149 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const isCompletato = project.status === 'completato'
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       <div className="mb-6 flex justify-between items-center">
-        <Link href="/dashboard" className="text-sm text-emerald-400 hover:text-emerald-300">
-          &larr; Torna alla Dashboard
+        <Link href="/dashboard" className="inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-foreground transition-colors">
+          <ArrowLeft className="w-4 h-4" /> Back to Dashboard
         </Link>
         
         {/* Test Buttons for Advisor/Dev */}
         <div className="flex gap-2">
           {isAnalisi && (
             <form action={simulateAnalysisComplete.bind(null, project.id)}>
-              <button type="submit" className="text-xs bg-zinc-800 text-zinc-300 px-3 py-1 rounded hover:bg-zinc-700">
-                [TEST] Segna come "Da Pagare"
+              <button type="submit" className="text-xs bg-surface border border-border text-muted px-3 py-1.5 rounded-md hover:text-foreground hover:bg-zinc-800 transition-colors">
+                [TEST] Mark as "To Pay"
               </button>
             </form>
           )}
         </div>
       </div>
 
-      <header className="mb-8">
-        <div className="flex items-center gap-4 mb-2">
-          <h1 className="text-3xl font-bold text-white">{project.name}</h1>
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-900/30 text-emerald-400 border border-emerald-800">
-            {project.status.toUpperCase().replace('_', ' ')}
-          </span>
+      <header className="mb-8 pb-6 border-b border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-2 justify-between">
+          <div className="flex items-center gap-4">
+            <h1 className="text-2xl font-bold text-foreground">{project.name}</h1>
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+              {project.status.replace(/_/g, ' ')}
+            </span>
+          </div>
         </div>
-        <p className="text-zinc-400 text-sm">
-          Creato il {new Date(project.created_at).toLocaleDateString('it-IT')}
+        <p className="text-muted text-sm mt-1">
+          Created on {new Date(project.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
         </p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           
-          {/* FASE: DA PAGARE (PRESA VISIONE) */}
+          {/* PHASE: TO PAY (PRELIMINARY RESULTS) */}
           {isDaPagare && (
-            <section className="bg-zinc-900 border border-emerald-900/50 rounded-xl p-6 shadow-[0_0_20px_rgba(16,185,129,0.1)] relative overflow-hidden">
+            <section className="bg-surface border border-emerald-500/30 rounded-xl p-6 shadow-sm relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
-              <h2 className="text-xl font-bold text-white mb-4">Analisi Completata</h2>
-              <p className="text-zinc-300 text-sm mb-6">
-                I nostri sistemi hanno completato l'elaborazione dei tuoi documenti. Abbiamo individuato alcune aree critiche che richiedono la tua attenzione.
+              <div className="flex items-center gap-3 mb-4">
+                <CheckCircle className="w-6 h-6 text-emerald-500" />
+                <h2 className="text-xl font-semibold text-foreground">Analysis Completed</h2>
+              </div>
+              <p className="text-muted text-sm mb-6 leading-relaxed">
+                Our systems have finished processing your documents. We have identified several critical areas that require your attention.
               </p>
               
-              <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-5 mb-6">
-                <h3 className="text-emerald-400 font-semibold mb-3 flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                  Criticità Preliminari Individuate
+              <div className="bg-background border border-border rounded-lg p-5 mb-6">
+                <h3 className="text-foreground font-medium mb-4 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-amber-500" />
+                  Preliminary Critical Findings
                 </h3>
-                <ul className="space-y-2 text-sm text-zinc-400">
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-400 mt-0.5">•</span>
-                    Incongruenza rilevata nelle specifiche di pressione del serbatoio T-101.
+                <ul className="space-y-3 text-sm text-muted">
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 flex-shrink-0"></div>
+                    <span>Inconsistency detected in the pressure specifications of tank T-101.</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-400 mt-0.5">•</span>
-                    Manca certificazione aggiornata per la valvola di sicurezza V-203.
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 flex-shrink-0"></div>
+                    <span>Missing updated certification for safety valve V-203.</span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-zinc-500 mt-0.5">•</span>
-                    <span className="blur-sm select-none">Ulteriore criticità grave sulla linea principale, con rischio di sversamento secondo le norme di sicurezza vigenti.</span>
+                  <li className="flex items-start gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-zinc-600 mt-1.5 flex-shrink-0"></div>
+                    <span className="blur-sm select-none">Additional severe critical issue on the main line, with spill risk according to current safety regulations.</span>
                   </li>
                 </ul>
               </div>
 
-              <div className="text-center">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-border">
+                <div className="text-sm text-muted">
+                  Unlock the full detailed report to see all findings.
+                </div>
                 <form action={simulatePayment.bind(null, project.id)}>
-                  <button type="submit" className="w-full sm:w-auto py-3 px-8 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                    Sblocca Report Completo (Paga Ora)
+                  <button type="submit" className="w-full sm:w-auto py-2 px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+                    <Lock className="w-4 h-4" />
+                    Unlock Full Report (Pay Now)
                   </button>
+                  <p className="mt-2 text-[10px] text-zinc-500 text-center sm:text-right">
+                    (Test button simulating payment)
+                  </p>
                 </form>
-                <p className="mt-3 text-xs text-zinc-500">
-                  (Questo è un bottone di test che simula il pagamento avvenuto)
-                </p>
               </div>
             </section>
           )}
 
-          {/* FASE: COMPLETATO */}
+          {/* PHASE: COMPLETED */}
           {isCompletato && (
-            <section className="bg-emerald-950/20 border border-emerald-900/50 rounded-xl p-6">
-              <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                Documentazione Sbloccata
-              </h2>
-              <p className="text-zinc-300 text-sm mb-4">
-                Grazie per il pagamento. Ora hai accesso completo a tutti i ticket generati e ai report dettagliati.
+            <section className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <CheckCircle className="w-6 h-6 text-emerald-500" />
+                <h2 className="text-xl font-semibold text-foreground">Documentation Unlocked</h2>
+              </div>
+              <p className="text-muted text-sm mb-6 leading-relaxed">
+                Thank you for your payment. You now have full access to all generated tickets and detailed reports.
               </p>
-              <button className="py-2 px-4 bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-medium rounded-lg transition-colors border border-zinc-700">
-                Scarica Report PDF
+              <button className="py-2.5 px-4 bg-background hover:bg-zinc-800 text-foreground text-sm font-medium rounded-lg transition-colors border border-border flex items-center gap-2">
+                <FileText className="w-4 h-4" />
+                Download PDF Report
               </button>
             </section>
           )}
 
-          {/* FASE: IN ANALISI */}
+          {/* PHASE: IN ANALYSIS */}
           {isAnalisi && (
-            <section className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-              <div className="flex items-center gap-3 text-emerald-400 mb-2">
-                <div className="w-5 h-5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin"></div>
-                <h2 className="text-lg font-semibold text-white">Analisi in corso...</h2>
+            <section className="bg-surface border border-border rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <Loader2 className="w-5 h-5 text-emerald-500 animate-spin" />
+                <h2 className="text-lg font-semibold text-foreground">Analysis in progress...</h2>
               </div>
-              <p className="text-zinc-400 text-sm">
-                I nostri consulenti e sistemi IA stanno analizzando i tuoi documenti. Riceverai una notifica non appena l'analisi preliminare sarà pronta per la visione.
+              <p className="text-muted text-sm leading-relaxed">
+                Our consultants and AI systems are currently analyzing your documents. You will receive a notification as soon as the preliminary analysis is ready for review.
               </p>
             </section>
           )}
 
           {/* Documents List */}
           <section>
-            <h2 className="text-xl font-bold text-white mb-4 border-b border-zinc-800 pb-2">Archivio Documenti</h2>
+            <h2 className="text-lg font-semibold text-foreground mb-4">Document Archive</h2>
             
             {!documents || documents.length === 0 ? (
-              <div className="bg-zinc-900/50 border border-zinc-800 border-dashed rounded-xl p-8 text-center">
-                <p className="text-zinc-500">Nessun documento caricato per questo progetto.</p>
+              <div className="bg-surface border border-border border-dashed rounded-xl p-8 flex flex-col items-center justify-center text-center">
+                <FileArchive className="w-8 h-8 text-muted mb-3" />
+                <p className="text-muted text-sm">No documents uploaded for this project yet.</p>
               </div>
             ) : (
-              <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
-                <ul className="divide-y divide-zinc-800">
+              <div className="bg-surface border border-border rounded-xl overflow-hidden shadow-sm">
+                <ul className="divide-y divide-border">
                   {documents.map((doc: any) => (
-                    <li key={doc.id} className="p-4 flex justify-between items-center hover:bg-zinc-800/50 transition-colors">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-zinc-800 rounded flex items-center justify-center text-zinc-400">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    <li key={doc.id} className="p-4 flex justify-between items-center hover:bg-zinc-800/30 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-background border border-border rounded-lg flex items-center justify-center">
+                          <FileText className="w-5 h-5 text-muted" />
                         </div>
                         <div>
-                          <p className="text-white text-sm font-medium">{doc.file_name}</p>
-                          <p className="text-xs text-zinc-500">
-                            Caricato il {new Date(doc.created_at).toLocaleDateString('it-IT')}
+                          <p className="text-foreground text-sm font-medium">{doc.file_name}</p>
+                          <p className="text-xs text-muted mt-1">
+                            Uploaded on {new Date(doc.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                           </p>
                         </div>
                       </div>
-                      <span className="text-xs bg-zinc-800 text-zinc-400 px-2 py-1 rounded">RAG Attivo</span>
+                      <span className="inline-flex items-center px-2 py-1 rounded text-[10px] font-medium bg-zinc-800 text-zinc-300 border border-border">
+                        Active RAG
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -176,15 +190,17 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
 
         <div className="lg:col-span-1">
-          {/* Upload Form - Nascosto se completato o da pagare per evitare confusione */}
+          {/* Upload Form - Hidden if completed or to pay to avoid confusion */}
           {isAnalisi ? (
             <DocumentUploadForm projectId={project.id} />
           ) : (
-            <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-center">
-              <svg className="w-12 h-12 text-zinc-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-              <h3 className="text-white font-medium mb-1">Upload Disabilitato</h3>
-              <p className="text-sm text-zinc-500">
-                Non puoi aggiungere ulteriori documenti in questa fase del progetto.
+            <div className="bg-surface border border-border rounded-xl p-6 text-center shadow-sm">
+              <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-5 h-5 text-zinc-400" />
+              </div>
+              <h3 className="text-foreground font-medium mb-2">Upload Disabled</h3>
+              <p className="text-sm text-muted leading-relaxed">
+                You cannot attach additional documents during this phase of the project.
               </p>
             </div>
           )}
