@@ -52,10 +52,10 @@ export default function NewProjectPage() {
               type="submit"
               className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-colors shadow-[0_0_15px_rgba(16,185,129,0.2)]"
             >
-              Crea Progetto e Vai al Pagamento
+              Richiedi Analisi Preliminare
             </button>
-            <p className="mt-3 text-center text-xs text-zinc-500">
-              Cliccando confermi di aver letto i termini di erogazione del servizio ex DM 37/08.
+            <p className="mt-3 text-center text-xs text-zinc-400">
+              L'analisi preliminare è gratuita. Il pagamento verrà richiesto solo per sbloccare i risultati completi.
             </p>
           </div>
         </form>

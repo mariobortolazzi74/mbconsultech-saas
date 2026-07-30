@@ -20,7 +20,7 @@ export async function createProject(formData: FormData) {
     .insert({
       client_id: user.id,
       name: name,
-      status: 'active'
+      status: 'analisi_preliminare'
     })
     .select()
     .single()
@@ -128,4 +128,34 @@ export async function uploadProjectDocument(formData: FormData) {
     documentId: document.id, 
     storagePath: filePath 
   }
+}
+
+export async function simulateAnalysisComplete(projectId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Non autenticato')
+
+  await supabase
+    .from('mbc_projects')
+    .update({ status: 'da_pagare' })
+    .eq('id', projectId)
+    .eq('client_id', user.id)
+
+  revalidatePath(`/dashboard/projects/${projectId}`)
+  revalidatePath('/dashboard')
+}
+
+export async function simulatePayment(projectId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Non autenticato')
+
+  await supabase
+    .from('mbc_projects')
+    .update({ status: 'completato' })
+    .eq('id', projectId)
+    .eq('client_id', user.id)
+
+  revalidatePath(`/dashboard/projects/${projectId}`)
+  revalidatePath('/dashboard')
 }
